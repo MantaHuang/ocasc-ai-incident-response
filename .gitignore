@@ -21,3 +21,8 @@ node_modules/
 .claude/settings.local.json
 tools/opendev-key.cmd
 .claude/
+__pycache__/
+eval/smoke/
+eval/*.lock
+eval/*.attempts.jsonl
+eval/*.manifest.json
