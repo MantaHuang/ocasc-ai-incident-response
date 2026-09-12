@@ -1,0 +1,18 @@
+# 算力密钥：绝不入库
+tools/opendev.env
+*.env
+!tools/opendev.env.example
+.env.local
+
+# 杂项
+.DS_Store
+Thumbs.db
+
+# 原始资料、截图和本地协作工具不随公开对话发布
+source/
+plan/
+tools/
+scripts/
+private/
+*.jsonl
+node_modules/
