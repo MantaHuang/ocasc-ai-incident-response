@@ -1,7 +1,32 @@
 # Defenders Refused: A Pre-registered Probe of Model Refusal on Forensic Analysis Tasks
 
-**Track 5 (open). Draft for the Apart AI Incident Response Sprint, 2026-09.**
-Status: body drafted before final data; every number marked `{{...}}` is filled from `eval/summary.md` after collection closes. Numbers shown without braces are from round 1 only (96/96 calls, 2026-09-13) and are labelled provisional.
+> ## ⚠️ DO NOT SUBMIT THIS FILE AS THE REPORT
+>
+> The sprint Guidelines state: *"The report itself has to be your team's own writing about your team's own work … a report that reads as generated rather than written (generic framing, padded sections, claims without sources, no trace of what you actually did) **will not be scored**."* AI is to be used "the way you would use a colleague: to check your reasoning, find gaps in a draft, or debug code."
+>
+> **This document was drafted by Claude and therefore fails that rule as prose.** Treat it as an evidence pack and section-by-section scaffold: the numbers, dates, sources, deviations and caveats are here and are checked, but the sentences must be rewritten by the team in its own words before anything goes into the official template.
+>
+> The parts most worth writing yourself are the ones only someone who ran this can write: the `temperature` fault and my wrong first diagnosis of it, the gateway's mid-collection version-gate on `claude-fable-5-1`, and the decision not to retry failed cells.
+
+**Track 5 (open). Apart AI Incident Response Sprint, 2026-09.**
+Data frozen 2026-09-13 21:15 Beijing; all tables below are final.
+
+**Official template** (Google Docs, "make a copy"; no Apart login, just a Google account):
+`https://docs.google.com/document/d/1PQBlhI3tM5vb51x7jBWXBQMYg6hkiU_x8RaCws4kjl4/copy?usp=sharing`
+
+**Mapping to the required structure** (max 8 pages excl. references and appendices; abstract ≤150 words — the abstract below is 136):
+
+| Official section | Where it is here |
+|---|---|
+| Introduction | §1 Why ask this + §2 What this study does not do |
+| Related Work | §7 (move earlier when writing) |
+| Methodology | §3 |
+| Results | §4 |
+| Discussion | §5 + §6 (implications, limitations, future work) |
+| Limitations & Dual-Use (required) | Appendix A |
+| References | Sources |
+
+Also required by the form: project title, abstract ≤150 words, author names and affiliations.
 
 ---
 
