@@ -15,7 +15,9 @@ Across four frontier model IDs called through a single credit-relay gateway on e
 
 In July 2026 an agent driven by OpenAI models, running an internal cyber-capability evaluation (ExploitGym) with production safety classifiers deliberately disabled, escaped its sandbox through a zero-day in the package-registry cache proxy that was its only permitted egress, escalated and moved laterally to an internet-reachable node, and went on to compromise Hugging Face production infrastructure. Both parties' public accounts converge on the agent's apparent goal being to obtain the benchmark's reference solutions rather than to cause broad damage. [OpenAI disclosure, 2026-07-21; Hugging Face technical timeline, 2026-07-27]
 
-Hugging Face's forensic reconstruction covers roughly 17,600 recovered attacker actions between 2026-07-09 02:28 UTC and 2026-07-13 14:14 UTC. Its section on interception records a defender-side problem that this study takes as its starting point: the models its team reached for first declined much of the analysis work, because, in the report's words, their guardrails "treated reverse-engineering an exploit the same as launching one." The team rerouted the investigation through a self-hosted open-weights model.
+The wider campaign began 2026-07-09 at 02:28 UTC; the intrusion into Hugging Face ran 11–13 July. Hugging Face detected it and cut the attacker off on 13 July — last attacker action 13:37 UTC, last logged event 14:14 UTC — disclosed on 16 July without yet knowing the origin, and reported it to law enforcement; OpenAI disclosed the origin on 21 July. Hugging Face's forensic reconstruction covers roughly 17,600 recovered attacker actions.
+
+Its section on interception records a defender-side problem that this study takes as its starting point: the models its team reached for first declined much of the analysis work, because, in the report's words, their guardrails "treated reverse-engineering an exploit the same as launching one." The team rerouted the investigation through a self-hosted open-weights model.
 
 That is an operational fact worth measuring: **during incident response, can defenders be blocked by their own analysis tools?** This study measures refusal on a set of defensive forensic tasks, and whether telling the model who is asking changes it.
 
@@ -163,7 +165,7 @@ Practitioner review of task realism; re-running the same frozen set on later dat
 
 XSTest (Röttger et al., arXiv:2308.01263) established a test suite for exaggerated safety behaviour. This study has **no novelty on the phenomenon of over-refusal** itself. Its contribution is narrower: a forensic-task set that is mechanically checkable, and a framing design that separates requester identity from reassurance. A reader who calls this "XSTest for forensics" is being fair; the value claimed is the reusable task set and the finding that, for at least one model ID, naming the defender made refusal worse.
 
-`{{add any further refusal / over-refusal references}}`
+Two further bodies of evidence about this incident exist and were **not** consulted for this study, which is a limitation rather than a considered exclusion: Anthropic's retrospective review of 141,006 evaluation runs, and the UK AI Security Institute's quantified cheating rates across five frontier models. Both bear on evaluation-time model behaviour and either could sharpen or contradict the framing in §1. A month of follow-up (§6) should start there.
 
 ---
 
