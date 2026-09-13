@@ -26,3 +26,5 @@ eval/smoke/
 eval/*.lock
 eval/*.attempts.jsonl
 eval/*.manifest.json
+eval/results.lock
+eval/__pycache__/

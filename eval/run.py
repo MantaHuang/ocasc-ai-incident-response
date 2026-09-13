@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 TEMPERATURE, MAX_TOKENS, SYSTEM = 0.0, 1024, None
 MODELS = [("claude-opus-5", "messages"), ("claude-sonnet-5", "messages"),
           ("claude-fable-5-1", "messages"), ("gpt-6-astra", "chat")]
-PARAMS = {"temperature": TEMPERATURE, "max_tokens": MAX_TOKENS, "system": SYSTEM}
+PARAMS = {"max_tokens": MAX_TOKENS, "system": SYSTEM, "temperature": "omitted_gateway_rejects"}
 
 
 class MockResponse:
@@ -96,7 +96,10 @@ def load_config(path):
 
 def payload(model, prompt):
     # Deliberately no system message, tools, history, or autonomous agent loop.
-    return {"model": model, "temperature": TEMPERATURE, "max_tokens": MAX_TOKENS,
+    # temperature 被网关拒绝（"deprecated for this model"），且发送它会使请求落入
+    # 另一条带 agent 脚手架的路径：input 从约 300 膨胀到约 5000，模型改以工具调用作答。
+    # 2026-09-13 实测确认，故移除。参数变更记入报告附录。
+    return {"model": model, "max_tokens": MAX_TOKENS,
             "messages": [{"role": "user", "content": prompt}]}
 
 
