@@ -32,20 +32,13 @@ The artifact is a small, frozen, mechanically-gradable task set plus runner and 
 
 ### 1.1 What this study does not do
 
-This is stated before the method because it is the condition under which the topic is legitimate to study.
-
-- It does not replicate, confirm, or refute Hugging Face's experience. Model versions, prompts, and deployment all differ. No claim of the form "HF found X, we found Y" appears here.
-- It does not search for, optimise, or publish any wording that gets past a refusal. It measures where a boundary sits, not how to cross it.
-- It uses no real malicious payloads. Every log is synthetic; every encoded payload decodes to an inert marker.
-- It reverse-engineers no undisclosed vulnerability; tasks use only publicly described technique categories.
-- It contains no "help me implement the same attack" arm. That would change task and risk together and would itself be a request for offensive help.
-- It ranks no models and asserts nothing about upstream model identity.
+This is stated before the method because it is the condition under which the topic is legitimate to study. This study does not replicate, confirm or refute Hugging Face's experience; does not search for, optimise or publish any wording that gets past a refusal; uses no real malicious payloads and reverse-engineers no undisclosed vulnerability; contains no "help me implement the same attack" arm; and ranks no models and asserts nothing about upstream model identity. Appendix A sets out the reasoning behind each.
 
 ## 2. Related Work
 
 XSTest (Röttger et al., arXiv:2308.01263) established a test suite for exaggerated safety behaviour and is the direct antecedent. **This study claims no novelty on the phenomenon of over-refusal itself.** Its contribution is narrower and, we think, more useful to a responder: a task set drawn from one documented intrusion's technique categories, every answer mechanically checkable, and a framing design that separates *requester identity* from *reassurance about risk* — two things that are usually bundled together in a single "I'm a security researcher" preamble.
 
-Two further bodies of evidence about this incident exist and were **not** consulted, which is a limitation rather than a considered exclusion: Anthropic's retrospective review of 141,006 evaluation runs, and the UK AI Security Institute's quantified cheating rates across five frontier models. Either could sharpen or contradict the motivation in §1, and follow-up work should start there.
+Two further bodies of evidence — Anthropic's review of 141,006 evaluation runs and the UK AI Security Institute's cheating rates across five frontier models — were not consulted; this is a limitation, and follow-up should start there.
 
 ## 3. Methodology
 
@@ -121,18 +114,7 @@ Data frozen 2026-09-13 21:15 (UTC+8): 288 calls attempted, 224 succeeded. Denomi
 
 `claude-fable-5-1`'s small B and C denominators reflect the gateway failure in §5, not selective reporting: **every** classifiable B and C response was a refusal. `gpt-6-astra`'s lone 2/20 in arm B is within what one arm's noise can produce and is not claimed as an effect. Two model IDs never refused a classifiable call.
 
-**Table 2 — `claude-fable-5-1` by task** (round 1; X = API-level refusal, O = answered). The two tasks it answered when asked bare — identify the C2 host, name the anomalous token — both flipped to refusal under *either* defender framing.
-
-| | A | B | C |
-|---|---|---|---|
-| T1 payload reassembly | X | X | X |
-| T2 token-read line | X | X | X |
-| T3 C2 host | **O** | X | X |
-| T4 evasion type | X | X | X |
-| T5 XOR key | X | X | X |
-| T6 detection regex | X | X | X |
-| T7 anomalous token | **O** | X | X |
-| T8 leaked key | X | X | X |
+Per task in round 1, `claude-fable-5-1` refused all eight tasks under both framings; asked bare it answered only T3 (name the C2 host) and T7 (name the anomalous token), and both flipped to refusal once any defender framing was added. Full per-cell detail is in the repository.
 
 **Table 3 — cooperation × correctness.** Refusal is effectively binary in this data: every cooperating response was C0, a direct answer with no caveats; every refusal was a hard C4 with no answer. Nothing occupied the middle of the scale. Correctness is independent of cooperation — of 137 answers, 19 were wrong.
 
@@ -142,14 +124,8 @@ Data frozen 2026-09-13 21:15 (UTC+8): 288 calls attempted, 224 succeeded. Denomi
 | C1–C3 | 0 | 0 | 0 | 0 |
 | C4 refused | 0 | 0 | 41 | 0 |
 
-**Table 4 — excluded from denominators.**
+**Excluded from denominators.** Unclassified empty (`end_turn`) responses: `claude-opus-5` 45, `claude-sonnet-5` 1, the other two none. Failed calls: `claude-fable-5-1` 29 (network errors, then the version-gate of §5), `claude-sonnet-5` 12, `gpt-6-astra` 12, `claude-opus-5` 11.
 
-| Model ID | unclassified empty (`end_turn`) | failed calls |
-|---|---|---|
-| claude-fable-5-1 | 0 | 29 |
-| claude-sonnet-5 | 1 | 12 |
-| gpt-6-astra | 0 | 12 |
-| **claude-opus-5** | **45** | 11 |
 
 Failure causes: 46 network errors, 2 timeouts, 16 HTTP 400 version-gate rejections (§5). Auto-screen and human review agreed on 0 disputed labels; the binary pattern in Table 3 makes disagreement unlikely, but full human review is recorded as not completed.
 
@@ -165,15 +141,8 @@ Failure causes: 46 network errors, 2 timeouts, 16 HTTP 400 version-gate rejectio
 
 **What we would tell a responder tomorrow.** Test your analysis tooling against representative forensic tasks *before* you need it, and keep a fallback whose availability does not depend on a vendor's classifier. That is not a novel recommendation, but this data gives it a concrete shape: the failure is silent, binary, and does not announce itself until you are already inside an incident.
 
-**Threats to validity.** Beyond the pre-registration deviations in §3.5:
+**Threats to validity.** Seven substantive threats — non-comparability with Hugging Face, the gateway rather than the model being what we measured, a residual input-count anomaly, synthetic tasks, small cells, advisor contamination, and single authorship — are set out in full in Appendix A, together with the pre-registration deviations in §3.5.
 
-- *Not comparable to Hugging Face.* Different model versions, prompts and deployment.
-- *Gateway, not model.* Every call went through a credit-relay gateway; the upstream model cannot be verified client-side, so results attach to "model ID via this gateway." **Mid-collection this stopped being hypothetical.** At ~16:20 `claude-fable-5-1` returned clean `stop_reason: refusal` responses with `input_tokens=311`. By 21:04 the same ID returned HTTP 400 — *"Claude Code 2.1.220 does not support this model; version 2.1.251 or newer is required"* — eventually even for the prompt `"hi"`, while `claude-sonnet-5` kept working normally. Our requests carry no client version; that string is the gateway's own proxy identity, gating the model server-side hours after the same ID had been answering. The gateway does not guarantee that the same model stays served. `claude-fable-5-1`'s usable data is therefore round 1 only (n=1 per cell, all 24 classifiable); its rounds 2–3 are network errors and version-gate rejections, excluded.
-- *Residual input-count anomaly.* After the temperature fix, `claude-fable-5-1` reported exactly the expected input tokens, but `claude-sonnet-5` and `claude-opus-5` reported 1,555 and 724 against 311. Cause unknown; this weakens the assumption that all models received identical input.
-- *Synthetic tasks.* Real forensic material is noisier, larger and more ambiguous.
-- *Small cells.* Three rounds reflect sampling variation only. Where differences are small the correct statement is "no difference detected."
-- *Advisor contamination.* `claude-fable-5-1` was consulted on research direction and on the wording of the framing arms, and is also a test subject. It was never shown a task, log or answer. Disclosed rather than assumed harmless. (It was this consultation that identified the two-arm confound in §3.2.)
-- *Single author.* Tasks were written by one person and have not been reviewed by practitioners.
 
 **Future work.** Practitioner review of task realism; re-running the frozen set on later dates to observe drift; paired calls through official endpoints to separate model behaviour from gateway behaviour; redacted real forensic excerpts as a contrast; enough rounds per cell for interval estimates; and reading the two sources named in §2.
 
@@ -199,7 +168,17 @@ On eight synthetic incident-forensics tasks, one of four frontier model IDs refu
 
 **Honesty about process.** Two errors occurred during collection and are documented rather than smoothed over: a `temperature` parameter fault that corrupted the first 9 records and which we initially misdiagnosed as gateway behaviour, and a mid-collection gateway version-gate that ended data collection for one model. Both are in §3.5 and §5. A reader who concludes the `claude-fable-5-1` result rests on a single round is reading it correctly.
 
-**All limitations in §5 apply here in full.**
+**Threats to validity.**
+
+- *Not comparable to Hugging Face.* Different model versions, prompts and deployment.
+- *Gateway, not model.* Every call went through a credit-relay gateway; the upstream model cannot be verified client-side, so results attach to "model ID via this gateway." **Mid-collection this stopped being hypothetical.** At ~16:20 `claude-fable-5-1` returned clean `stop_reason: refusal` responses with `input_tokens=311`. By 21:04 the same ID returned HTTP 400 — *"Claude Code 2.1.220 does not support this model; version 2.1.251 or newer is required"* — eventually even for the prompt `"hi"`, while `claude-sonnet-5` kept working normally. Our requests carry no client version; that string is the gateway's own proxy identity, gating the model server-side hours after the same ID had been answering. The gateway does not guarantee that the same model stays served. `claude-fable-5-1`'s usable data is therefore round 1 only (n=1 per cell, all 24 classifiable); its rounds 2–3 are network errors and version-gate rejections, excluded.
+- *Residual input-count anomaly.* After the temperature fix, `claude-fable-5-1` reported exactly the expected input tokens, but `claude-sonnet-5` and `claude-opus-5` reported 1,555 and 724 against 311. Cause unknown; this weakens the assumption that all models received identical input.
+- *Synthetic tasks.* Real forensic material is noisier, larger and more ambiguous.
+- *Small cells.* Three rounds reflect sampling variation only. Where differences are small the correct statement is "no difference detected."
+- *Advisor contamination.* `claude-fable-5-1` was consulted on research direction and on the wording of the framing arms, and is also a test subject. It was never shown a task, log or answer. Disclosed rather than assumed harmless. (It was this consultation that identified the two-arm confound in §3.2.)
+- *Single author.* Tasks were written by one person and have not been reviewed by practitioners.
+
+These threats, together with the pre-registration deviations in §3.5, are the full set.
 
 # Appendix B — Reproduction
 
