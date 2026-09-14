@@ -2,17 +2,20 @@
      CUT EVERYTHING ABOVE THE LINE BELOW BEFORE PASTING INTO THE TEMPLATE
      Template: https://docs.google.com/document/d/1PQBlhI3tM5vb51x7jBWXBQMYg6hkiU_x8RaCws4kjl4/copy?usp=sharing
      Body target: <=8 pages excl. references and appendices. Abstract: 136 words (cap 150).
-     Fill in: author names and affiliations. Pick track(s) on the form: Track 5 (and optionally 1).
+     Authors are already filled in. Pick track(s) on the form: Track 5 (and optionally 1).
      ============================================================ -->
 
 ---
 
 # Defenders Refused: Measuring Model Refusal on Incident-Forensics Tasks
 
-**Authors:** `[names and affiliations — required by the submission form]`
+**Authors:** Manta Huang — Korn Ferry RPO; Sylvia Huang — Match Point
+
 **Track:** 5 (Open). Relevant to Track 1 (refusal measurement across agentic workflows).
+
 **Artifact:** `eval/` — eight-task forensic refusal set, runner, grader, frozen raw data.
-**Repository:** `https://github.com/MantaHuang/ocasc-ai-incident-response`
+
+**Repository:** https://github.com/MantaHuang/ocasc-ai-incident-response
 
 ## Abstract
 
